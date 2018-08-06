@@ -1,0 +1,33 @@
+#----------------------- <+++ansible-managed-file+++> -------------------------+
+#
+#                             IMPORTANT WARNING
+#
+#  This file is managed remotely by Ansible orchestration tool. Any local
+#  changes will be overwritten without any notice !!! You have been warned !!!
+#
+#----------------------- <+++ansible-managed-file+++> -------------------------+
+
+echo "+------------------------------------------------------------------------------+"
+echo "| System status                                                                |"
+echo "+------------------------------------------------------------------------------+"
+echo "RELEASE - `lsb_release -d | cut -f 2 -d : | sed 's/^\s//'`";
+echo "UPTIME - `/usr/bin/uptime | cut -d \, -f 1`";
+{{ hm_monitored__plugins_dir }}/check_apt | sed 's/:/ -/' | cut -f 1 -d \|;
+{{ hm_monitored__plugins_dir }}/check_users -w {{ hm_monitored__settings_check_users['w'] }} -c {{ hm_monitored__settings_check_users['c'] }} | cut -f 1 -d \|;
+{{ hm_monitored__plugins_dir }}/check_load -w {{ hm_monitored__settings_check_load['w'] }} -c {{ hm_monitored__settings_check_load['c'] }} | cut -f 1 -d \|;
+{% for mnt in ansible_mounts %}
+{% if mnt['mount'] in ['/','/var','/home'] %}
+{{ hm_monitored__plugins_dir }}/check_disk -w {{ hm_monitored__settings_check_disk['w'] }} -c {{ hm_monitored__settings_check_disk['c'] }} -p {{ mnt['mount'] }} / | cut -f 1 -d \;;
+{% endif %}
+{% endfor %}
+{{ hm_monitored__plugins_dir }}/check_procs -w {{ hm_monitored__settings_check_zombies['w'] }} -c {{ hm_monitored__settings_check_zombies['c'] }} -s Z | sed 's/:/ -/' | cut -f 1 -d \|;
+{{ hm_monitored__plugins_dir }}/check_procs -w {{ hm_monitored__settings_check_procs['w'] }} -c {{ hm_monitored__settings_check_procs['c'] }} | sed 's/:/ -/' | cut -f 1 -d \|;
+{{ hm_monitored__plugins_dir }}/check_ntp_time -H {{ hm_monitored__ntp_server }} -w {{ hm_monitored__settings_check_ntp['w'] }} -c {{ hm_monitored__settings_check_ntp['c'] }} | cut -f 1 -d \| | sed 's/:/ -/';
+{{ hm_monitored__plugins_dir }}/check_ro_mounts -x '/media/*' -x '/sys/*' -X 'autofs' -X 'cgroup' -X 'binfmt_misc' -X 'debugfs' -X 'devpts' -X 'devtmpfs' -X 'fuse.gvfsd-fuse' -X 'fusectl' -X 'mqueue' -X 'proc' -X 'selinuxfs' -X 'sysfs' -X 'tmpfs'
+for status_file in `find /opt/system-status/system-status.d -type f -executable | sort`
+do
+    echo "                                   ---"
+    $status_file
+done
+echo "+------------------------------------------------------------------------------+"
+echo "Current system time: `date`"

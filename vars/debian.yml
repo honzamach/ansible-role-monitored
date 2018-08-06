@@ -1,0 +1,6 @@
+---
+
+#
+# Name of the NRPE service.
+#
+hm_monitored__service_name: nagios-nrpe-server

@@ -1,0 +1,114 @@
+---
+
+- name: Configuring NRPE daemon
+  template:
+    src: "nrpe.cfg.j2"
+    dest: /etc/nagios/nrpe.cfg
+    owner: root
+    group: root
+    mode: 0644
+    backup: yes
+  with_first_found:
+    - "host_files/{{ inventory_hostname }}/nrpe.cfg.j2"
+    - "group_files/servers-production/nrpe.cfg.{{ ansible_lsb['codename'] }}.j2"
+    - "group_files/servers-production/nrpe.cfg.j2"
+    - "group_files/servers-development/nrpe.cfg.{{ ansible_lsb['codename'] }}.j2"
+    - "group_files/servers-development/nrpe.cfg.j2"
+    - "group_files/servers-demo/nrpe.cfg.{{ ansible_lsb['codename'] }}.j2"
+    - "group_files/servers-demo/nrpe.cfg.j2"
+    - "group_files/servers/nrpe.cfg.{{ ansible_lsb['codename'] }}.j2"
+    - "group_files/servers/nrpe.cfg.j2"
+    - "nrpe.cfg.{{ ansible_lsb['codename'] }}.j2"
+    - "nrpe.cfg.j2"
+  notify: Restart NRPE service
+
+- name: Installing local NRPE daemon configurations
+  template:
+    src: "nrpe_local.cfg.j2"
+    dest: /etc/nagios/nrpe.d/local.cfg
+    owner: root
+    group: root
+    mode: 0644
+    backup: yes
+  with_first_found:
+    - "host_files/{{ inventory_hostname }}/nrpe_local.cfg.j2"
+    - "group_files/servers-production/nrpe_local.cfg.{{ ansible_lsb['codename'] }}.j2"
+    - "group_files/servers-production/nrpe_local.cfg.j2"
+    - "group_files/servers-development/nrpe_local.cfg.{{ ansible_lsb['codename'] }}.j2"
+    - "group_files/servers-development/nrpe_local.cfg.j2"
+    - "group_files/servers-demo/nrpe_local.cfg.{{ ansible_lsb['codename'] }}.j2"
+    - "group_files/servers-demo/nrpe_local.cfg.j2"
+    - "group_files/servers/nrpe_local.cfg.{{ ansible_lsb['codename'] }}.j2"
+    - "group_files/servers/nrpe_local.cfg.j2"
+    - "nrpe_local.cfg.{{ ansible_lsb['codename'] }}.j2"
+    - "nrpe_local.cfg.j2"
+  notify: Restart NRPE service
+  when: hm_monitored__local_commands|length
+
+- name: Ensuring NRPE daemon is running and enabled at system start
+  service:
+    name: "{{ hm_monitored__service_name }}"
+    state: started
+    enabled: yes
+
+- name: Managing system-status script
+  template:
+    src: system-status.j2
+    dest: /opt/system-status/system-status
+    owner: root
+    group: root
+    mode: 0755
+    backup: yes
+  with_first_found:
+    - "host_files/{{ inventory_hostname }}/system-status.j2"
+    - "group_files/servers-production/system-status.{{ ansible_lsb['codename'] }}.j2"
+    - "group_files/servers-production/system-status.j2"
+    - "group_files/servers-development/system-status.{{ ansible_lsb['codename'] }}.j2"
+    - "group_files/servers-development/system-status.j2"
+    - "group_files/servers-demo/system-status.{{ ansible_lsb['codename'] }}.j2"
+    - "group_files/servers-demo/system-status.j2"
+    - "group_files/servers/system-status.{{ ansible_lsb['codename'] }}.j2"
+    - "group_files/servers/system-status.j2"
+    - "system-status.{{ ansible_lsb['codename'] }}.j2"
+    - "system-status.j2"
+
+- name: Managing system-status script installation
+  file:
+    src: /opt/system-status/system-status
+    dest: /usr/local/bin/system-status
+    state: link
+
+- name: Managing system status utility subdirectory
+  file:
+    path: /opt/system-status/system-status.d
+    state: directory
+    mode: 0755
+    owner: root
+    group: root
+
+- name: Managing system-status-local script
+  template:
+    src: "system-status-local.j2"
+    dest: /opt/system-status/system-status.d/10-local
+    owner: root
+    group: root
+    mode: 0755
+  with_first_found:
+    - "host_files/{{ inventory_hostname }}/system-status-local.j2"
+    - "group_files/servers-production/system-status-local.{{ ansible_lsb['codename'] }}.j2"
+    - "group_files/servers-production/system-status-local.j2"
+    - "group_files/servers-development/system-status-local.{{ ansible_lsb['codename'] }}.j2"
+    - "group_files/servers-development/system-status-local.j2"
+    - "group_files/servers-demo/system-status-local.{{ ansible_lsb['codename'] }}.j2"
+    - "group_files/servers-demo/system-status-local.j2"
+    - "group_files/servers/system-status-local.{{ ansible_lsb['codename'] }}.j2"
+    - "group_files/servers/system-status-local.j2"
+    - "system-status-local.{{ ansible_lsb['codename'] }}.j2"
+    - "system-status-local.j2"
+  when: hm_monitored__local_commands|length
+
+- name: Removing system-status-local script
+  file:
+    path: /opt/system-status/system-status.d/10-local
+    state: absent
+  when: not hm_monitored__local_commands|length

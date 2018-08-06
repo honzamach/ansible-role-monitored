@@ -1,0 +1,28 @@
+---
+
+- name: Installing necessary packages
+  apt:
+    name: "{{ hm_monitored__package_list }}"
+    state: latest
+
+- name: Installing custom Nagios plugins
+  copy:
+    src: "{{ item }}"
+    dest: "{{ hm_monitored__plugins_dir }}/{{ item }}"
+    owner: root
+    group: root
+    mode: 0755
+  with_items:
+    - check_file_count
+    - check_ro_mounts
+
+- name: Installing system status utility directories
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: 0755
+    owner: root
+    group: root
+  with_items:
+    - /opt/system-status
+    - /opt/system-status/system-status.d

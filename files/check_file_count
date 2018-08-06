@@ -1,0 +1,40 @@
+#!/bin/bash
+
+script=${0##*/}
+warn=0
+crit=65536
+read -rd '' helps <<EOF
+$script: Icinga plugin to check too high number of files in directory.
+
+Usage: $script -d dir [-w num] [-c num] [-h ]
+
+  -d dir    directory to watch
+  -w num    warning if number of files exceeds this value (default $warn)
+  -c num    critical if number of files exceeds this value (default $crit)
+EOF
+
+function bailout {
+        echo -n "$script" | tr '[:lower:]' '[:upper:]'
+        echo " $2 $3"
+        exit "$1"
+}
+
+while getopts hvVd:w:c: opt; do
+        case "$opt" in
+                h) bailout 3 "UNKNOWN" "$helps";;
+                d) dir="$OPTARG";;
+                w) warn="$OPTARG";;
+                c) crit="$OPTARG";;
+                "?") bailout 3 "UNKNOWN" "Unknown option, use -h for help";;
+        esac
+done
+
+[ -z "$dir" ] && bailout 3 "UNKNOWN" "-d not specified"
+
+count=$(find "$dir" -mindepth 1 -maxdepth 1 | wc -l)
+
+[ "$count" -gt "$crit" ] && bailout 2 "CRIT" "$count"
+
+[ "$count" -gt "$warn" ] && bailout 1 "WARN" "$count"
+
+bailout 0 "OK" "$count"
