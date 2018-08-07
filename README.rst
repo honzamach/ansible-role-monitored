@@ -50,6 +50,7 @@ This role directly manages content of following files on target system:
 * ``/opt/system-status/system-status``
 * ``/opt/system-status/system-status.d/10-local``
 
+
 Role variables
 --------------------------------------------------------------------------------
 
@@ -141,6 +142,13 @@ that can be overriden and adjusted as needed:
 
     * *Datatype:* ``dictionary``
     * *Default value:* ``{ "p": 22 }``
+
+Additionally this role makes use of following built-in Ansible variables:
+
+.. envvar:: ansible_lsb['codename']
+
+    Debian distribution codename is used for :ref:`template customization <section-overview-customize-templates>`__
+    feature.
 
 
 Usage and customization
