@@ -2,7 +2,7 @@
 
 - name: Configuring NRPE daemon
   template:
-    src: "nrpe.cfg.j2"
+    src: "{{ item }}"
     dest: /etc/nagios/nrpe.cfg
     owner: root
     group: root
@@ -24,7 +24,7 @@
 
 - name: Installing local NRPE daemon configurations
   template:
-    src: "nrpe_local.cfg.j2"
+    src: "{{ item }}"
     dest: /etc/nagios/nrpe.d/local.cfg
     owner: root
     group: root
@@ -53,7 +53,7 @@
 
 - name: Managing system-status script
   template:
-    src: system-status.j2
+    src: "{{ item }}"
     dest: /opt/system-status/system-status
     owner: root
     group: root
@@ -88,7 +88,7 @@
 
 - name: Managing system-status-local script
   template:
-    src: "system-status-local.j2"
+    src: "{{ item }}"
     dest: /opt/system-status/system-status.d/10-local
     owner: root
     group: root
