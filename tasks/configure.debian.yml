@@ -10,12 +10,8 @@
     backup: yes
   with_first_found:
     - "host_files/{{ inventory_hostname }}/nrpe.cfg.j2"
-    - "group_files/servers-production/nrpe.cfg.{{ ansible_lsb['codename'] }}.j2"
-    - "group_files/servers-production/nrpe.cfg.j2"
-    - "group_files/servers-development/nrpe.cfg.{{ ansible_lsb['codename'] }}.j2"
-    - "group_files/servers-development/nrpe.cfg.j2"
-    - "group_files/servers-demo/nrpe.cfg.{{ ansible_lsb['codename'] }}.j2"
-    - "group_files/servers-demo/nrpe.cfg.j2"
+    - "group_files/servers-{{ msms_server_type }}/nrpe.cfg.{{ ansible_lsb['codename'] }}.j2"
+    - "group_files/servers-{{ msms_server_type }}/nrpe.cfg.j2"
     - "group_files/servers/nrpe.cfg.{{ ansible_lsb['codename'] }}.j2"
     - "group_files/servers/nrpe.cfg.j2"
     - "nrpe.cfg.{{ ansible_lsb['codename'] }}.j2"
@@ -32,12 +28,8 @@
     backup: yes
   with_first_found:
     - "host_files/{{ inventory_hostname }}/nrpe_local.cfg.j2"
-    - "group_files/servers-production/nrpe_local.cfg.{{ ansible_lsb['codename'] }}.j2"
-    - "group_files/servers-production/nrpe_local.cfg.j2"
-    - "group_files/servers-development/nrpe_local.cfg.{{ ansible_lsb['codename'] }}.j2"
-    - "group_files/servers-development/nrpe_local.cfg.j2"
-    - "group_files/servers-demo/nrpe_local.cfg.{{ ansible_lsb['codename'] }}.j2"
-    - "group_files/servers-demo/nrpe_local.cfg.j2"
+    - "group_files/servers-{{ msms_server_type }}/nrpe_local.cfg.{{ ansible_lsb['codename'] }}.j2"
+    - "group_files/servers-{{ msms_server_type }}/nrpe_local.cfg.j2"
     - "group_files/servers/nrpe_local.cfg.{{ ansible_lsb['codename'] }}.j2"
     - "group_files/servers/nrpe_local.cfg.j2"
     - "nrpe_local.cfg.{{ ansible_lsb['codename'] }}.j2"
@@ -61,12 +53,8 @@
     backup: yes
   with_first_found:
     - "host_files/{{ inventory_hostname }}/system-status.j2"
-    - "group_files/servers-production/system-status.{{ ansible_lsb['codename'] }}.j2"
-    - "group_files/servers-production/system-status.j2"
-    - "group_files/servers-development/system-status.{{ ansible_lsb['codename'] }}.j2"
-    - "group_files/servers-development/system-status.j2"
-    - "group_files/servers-demo/system-status.{{ ansible_lsb['codename'] }}.j2"
-    - "group_files/servers-demo/system-status.j2"
+    - "group_files/servers-{{ msms_server_type }}/system-status.{{ ansible_lsb['codename'] }}.j2"
+    - "group_files/servers-{{ msms_server_type }}/system-status.j2"
     - "group_files/servers/system-status.{{ ansible_lsb['codename'] }}.j2"
     - "group_files/servers/system-status.j2"
     - "system-status.{{ ansible_lsb['codename'] }}.j2"
@@ -95,12 +83,8 @@
     mode: 0755
   with_first_found:
     - "host_files/{{ inventory_hostname }}/system-status-local.j2"
-    - "group_files/servers-production/system-status-local.{{ ansible_lsb['codename'] }}.j2"
-    - "group_files/servers-production/system-status-local.j2"
-    - "group_files/servers-development/system-status-local.{{ ansible_lsb['codename'] }}.j2"
-    - "group_files/servers-development/system-status-local.j2"
-    - "group_files/servers-demo/system-status-local.{{ ansible_lsb['codename'] }}.j2"
-    - "group_files/servers-demo/system-status-local.j2"
+    - "group_files/servers-{{ msms_server_type }}/system-status-local.{{ ansible_lsb['codename'] }}.j2"
+    - "group_files/servers-{{ msms_server_type }}/system-status-local.j2"
     - "group_files/servers/system-status-local.{{ ansible_lsb['codename'] }}.j2"
     - "group_files/servers/system-status-local.j2"
     - "system-status-local.{{ ansible_lsb['codename'] }}.j2"
@@ -136,12 +120,8 @@
     mode: 0644
   with_first_found:
     - "host_files/{{ inventory_hostname }}/monitoring_overview.rst.j2"
-    - "group_files/servers-production/monitoring_overview.rst.{{ ansible_lsb['codename'] }}.j2"
-    - "group_files/servers-production/monitoring_overview.rst.j2"
-    - "group_files/servers-development/monitoring_overview.rst.{{ ansible_lsb['codename'] }}.j2"
-    - "group_files/servers-development/monitoring_overview.rst.j2"
-    - "group_files/servers-demo/monitoring_overview.rst.{{ ansible_lsb['codename'] }}.j2"
-    - "group_files/servers-demo/monitoring_overview.rst.j2"
+    - "group_files/servers-{{ msms_server_type }}/monitoring_overview.rst.{{ ansible_lsb['codename'] }}.j2"
+    - "group_files/servers-{{ msms_server_type }}/monitoring_overview.rst.j2"
     - "group_files/servers/monitoring_overview.rst.{{ ansible_lsb['codename'] }}.j2"
     - "group_files/servers/monitoring_overview.rst.j2"
     - "{{ role_path }}/templates/monitoring_overview.rst.{{ ansible_lsb['codename'] }}.j2"
