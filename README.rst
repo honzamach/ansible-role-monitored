@@ -202,12 +202,12 @@ Example content of inventory file ``inventory``::
     [server-central-logserver]
     remote
 
-    [servers-monitored]
+    [servers_monitored]
     localhost
 
 Example content of role playbook file ``playbook.yml``::
 
-    - hosts: servers-monitored
+    - hosts: servers_monitored
       remote_user: root
       roles:
         - role: honzamach.monitored
