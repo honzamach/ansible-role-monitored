@@ -51,6 +51,16 @@ This role directly manages content of following files on target system:
 * ``/opt/system-status/system-status.d/10-local``
 
 
+Additional Nagios plugins
+--------------------------------------------------------------------------------
+
+This role installs following additional Nagios plugins:
+
+* `check_file_count <https://exchange.nagios.org/directory/Plugins/System-Metrics/File-System/check_file_count/details>`__
+* `check_ro_mounts <https://exchange.nagios.org/directory/Plugins/Operating-Systems/Linux/check_ro_mounts/details>`__
+* `check_ssl_cert <https://exchange.nagios.org/directory/Plugins/Network-Protocols/HTTP/check_ssl_cert/details>`__
+
+
 Role variables
 --------------------------------------------------------------------------------
 
