@@ -23,7 +23,7 @@ echo "UPTIME - `/usr/bin/uptime | cut -d \, -f 1`";
 {{ hm_monitored__plugins_dir }}/check_procs -w {{ hm_monitored__settings_check_zombies['w'] }} -c {{ hm_monitored__settings_check_zombies['c'] }} -s Z | sed 's/:/ -/' | cut -f 1 -d \|;
 {{ hm_monitored__plugins_dir }}/check_procs -w {{ hm_monitored__settings_check_procs['w'] }} -c {{ hm_monitored__settings_check_procs['c'] }} | sed 's/:/ -/' | cut -f 1 -d \|;
 {{ hm_monitored__plugins_dir }}/check_ntp_time -H {{ hm_monitored__ntp_server }} -w {{ hm_monitored__settings_check_ntp['w'] }} -c {{ hm_monitored__settings_check_ntp['c'] }} | cut -f 1 -d \| | sed 's/:/ -/';
-{{ hm_monitored__plugins_dir }}/check_ro_mounts -x '/media/*' -x '/sys/*' -X 'autofs' -X 'cgroup' -X 'binfmt_misc' -X 'debugfs' -X 'devpts' -X 'devtmpfs' -X 'fuse.gvfsd-fuse' -X 'fusectl' -X 'mqueue' -X 'proc' -X 'selinuxfs' -X 'sysfs' -X 'tmpfs'
+{{ hm_monitored__plugins_dir }}/check_ro_mounts -x '/media/*' -x '/sys/*' -X 'autofs' -X 'cgroup' -X 'binfmt_misc' -X 'debugfs' -X 'devpts' -X 'devtmpfs' -X 'fuse.gvfsd-fuse' -X 'fusectl' -X 'mqueue' -X 'proc' -X 'selinuxfs' -X 'sysfs' -X 'tmpfs' | sed 's/:/ -/'
 for status_file in `find /opt/system-status/system-status.d -type f -executable | sort`
 do
     echo "                                   ---"
