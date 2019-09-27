@@ -15,6 +15,7 @@
   with_items:
     - check_file_count
     - check_ro_mounts
+    - check_ssl_cert
 
 - name: Installing system status utility directories
   file:

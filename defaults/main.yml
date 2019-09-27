@@ -6,6 +6,7 @@
 hm_monitored__package_list:
   - nagios-nrpe-server
   - nagios-plugins-basic
+  - expect
 
 #
 # Location of Nagios plugin directory.
