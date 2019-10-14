@@ -116,15 +116,31 @@
 - name: Generating monitoring overview documentation page
   template:
     src: "{{ item }}"
-    dest: "{{ playbook_dir }}/doc/_pages/monitoring_overview_{{inventory_hostname}}.rst"
+    dest: "{{ playbook_dir }}/vault/docs/section_02_monitoring.rst"
     mode: 0644
   with_first_found:
-    - "host_files/{{ inventory_hostname }}/monitoring_overview.rst.j2"
-    - "group_files/servers-{{ msms_server_type }}/monitoring_overview.rst.{{ ansible_lsb['codename'] }}.j2"
-    - "group_files/servers-{{ msms_server_type }}/monitoring_overview.rst.j2"
-    - "group_files/servers/monitoring_overview.rst.{{ ansible_lsb['codename'] }}.j2"
-    - "group_files/servers/monitoring_overview.rst.j2"
-    - "{{ role_path }}/templates/monitoring_overview.rst.{{ ansible_lsb['codename'] }}.j2"
-    - "{{ role_path }}/templates/monitoring_overview.rst.j2"
+    - "host_files/{{ inventory_hostname }}/monitoring.rst.j2"
+    - "group_files/servers-{{ msms_server_type }}/monitoring.rst.{{ ansible_lsb['codename'] }}.j2"
+    - "group_files/servers-{{ msms_server_type }}/monitoring.rst.j2"
+    - "group_files/servers/monitoring.rst.{{ ansible_lsb['codename'] }}.j2"
+    - "group_files/servers/monitoring.rst.j2"
+    - "{{ role_path }}/templates/monitoring.rst.{{ ansible_lsb['codename'] }}.j2"
+    - "{{ role_path }}/templates/monitoring.rst.j2"
+  run_once: true
+  delegate_to: localhost
+
+- name: Generating monitoring detail documentation pages
+  template:
+    src: "{{ item }}"
+    dest: "{{ playbook_dir }}/vault/docs/monitoring_detail_{{inventory_hostname}}.rst"
+    mode: 0644
+  with_first_found:
+    - "host_files/{{ inventory_hostname }}/monitoring_detail.rst.j2"
+    - "group_files/servers-{{ msms_server_type }}/monitoring_detail.rst.{{ ansible_lsb['codename'] }}.j2"
+    - "group_files/servers-{{ msms_server_type }}/monitoring_detail.rst.j2"
+    - "group_files/servers/monitoring_detail.rst.{{ ansible_lsb['codename'] }}.j2"
+    - "group_files/servers/monitoring_detail.rst.j2"
+    - "{{ role_path }}/templates/monitoring_detail.rst.{{ ansible_lsb['codename'] }}.j2"
+    - "{{ role_path }}/templates/monitoring_detail.rst.j2"
   delegate_to: localhost
 
