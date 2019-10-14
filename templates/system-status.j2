@@ -7,9 +7,9 @@
 #
 #----------------------- <+++ansible-managed-file+++> -------------------------+
 
-echo "+------------------------------------------------------------------------------+"
-echo "| System status                                                                |"
-echo "+------------------------------------------------------------------------------+"
+echo "#==============================================================================#"
+echo "| SYSTEM STATUS                                                                |"
+echo "#==============================================================================#"
 echo "RELEASE - `lsb_release -d | cut -f 2 -d : | sed 's/^\s//'`";
 echo "UPTIME - `/usr/bin/uptime | cut -d \, -f 1`";
 {{ hm_monitored__plugins_dir }}/check_apt | sed 's/:/ -/' | cut -f 1 -d \|;
@@ -26,7 +26,6 @@ echo "UPTIME - `/usr/bin/uptime | cut -d \, -f 1`";
 {{ hm_monitored__plugins_dir }}/check_ro_mounts -x '/media/*' -x '/sys/*' -X 'autofs' -X 'cgroup' -X 'binfmt_misc' -X 'debugfs' -X 'devpts' -X 'devtmpfs' -X 'fuse.gvfsd-fuse' -X 'fusectl' -X 'mqueue' -X 'proc' -X 'selinuxfs' -X 'sysfs' -X 'tmpfs' | sed 's/:/ -/'
 for status_file in `find /opt/system-status/system-status.d -type f -executable | sort`
 do
-    echo "                                   ---"
     $status_file
 done
 echo "+------------------------------------------------------------------------------+"
