@@ -1,0 +1,10 @@
+---
+
+- name: "ASSERTION: 'hm_monitored__allowed_hosts' is sane"
+  assert:
+    that:
+      - 'hm_monitored__allowed_hosts is defined'
+      - 'hm_monitored__allowed_hosts|length > 0'
+    msg: "Configuration value 'hm_monitored__allowed_hosts' must contain list of addresses of Nagios servers"
+  tags:
+    - check
