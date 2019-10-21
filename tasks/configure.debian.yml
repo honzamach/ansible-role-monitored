@@ -9,11 +9,11 @@
     mode: 0644
     backup: yes
   with_first_found:
-    - "host_files/{{ inventory_hostname }}/nrpe.cfg.j2"
-    - "group_files/servers-{{ msms_server_type }}/nrpe.cfg.{{ ansible_lsb['codename'] }}.j2"
-    - "group_files/servers-{{ msms_server_type }}/nrpe.cfg.j2"
-    - "group_files/servers/nrpe.cfg.{{ ansible_lsb['codename'] }}.j2"
-    - "group_files/servers/nrpe.cfg.j2"
+    - "inventory/host_files/{{ inventory_hostname }}/honzamach.monitored/nrpe.cfg.j2"
+    - "inventory/group_files/servers_{{ msms_server_type }}/honzamach.monitored/nrpe.cfg.{{ ansible_lsb['codename'] }}.j2"
+    - "inventory/group_files/servers_{{ msms_server_type }}/honzamach.monitored/nrpe.cfg.j2"
+    - "inventory/group_files/servers/honzamach.monitored/nrpe.cfg.{{ ansible_lsb['codename'] }}.j2"
+    - "inventory/group_files/servers/honzamach.monitored/nrpe.cfg.j2"
     - "nrpe.cfg.{{ ansible_lsb['codename'] }}.j2"
     - "nrpe.cfg.j2"
   notify: Restart NRPE service
@@ -27,11 +27,11 @@
     mode: 0644
     backup: yes
   with_first_found:
-    - "host_files/{{ inventory_hostname }}/nrpe_local.cfg.j2"
-    - "group_files/servers-{{ msms_server_type }}/nrpe_local.cfg.{{ ansible_lsb['codename'] }}.j2"
-    - "group_files/servers-{{ msms_server_type }}/nrpe_local.cfg.j2"
-    - "group_files/servers/nrpe_local.cfg.{{ ansible_lsb['codename'] }}.j2"
-    - "group_files/servers/nrpe_local.cfg.j2"
+    - "inventory/host_files/{{ inventory_hostname }}/honzamach.monitored/nrpe_local.cfg.j2"
+    - "inventory/group_files/servers_{{ msms_server_type }}/honzamach.monitored/nrpe_local.cfg.{{ ansible_lsb['codename'] }}.j2"
+    - "inventory/group_files/servers_{{ msms_server_type }}/honzamach.monitored/nrpe_local.cfg.j2"
+    - "inventory/group_files/servers/honzamach.monitored/nrpe_local.cfg.{{ ansible_lsb['codename'] }}.j2"
+    - "inventory/group_files/servers/honzamach.monitored/nrpe_local.cfg.j2"
     - "nrpe_local.cfg.{{ ansible_lsb['codename'] }}.j2"
     - "nrpe_local.cfg.j2"
   notify: Restart NRPE service
@@ -52,11 +52,11 @@
     mode: 0755
     backup: yes
   with_first_found:
-    - "host_files/{{ inventory_hostname }}/system-status.j2"
-    - "group_files/servers-{{ msms_server_type }}/system-status.{{ ansible_lsb['codename'] }}.j2"
-    - "group_files/servers-{{ msms_server_type }}/system-status.j2"
-    - "group_files/servers/system-status.{{ ansible_lsb['codename'] }}.j2"
-    - "group_files/servers/system-status.j2"
+    - "inventory/host_files/{{ inventory_hostname }}/honzamach.monitored/system-status.j2"
+    - "inventory/group_files/servers_{{ msms_server_type }}/honzamach.monitored/system-status.{{ ansible_lsb['codename'] }}.j2"
+    - "inventory/group_files/servers_{{ msms_server_type }}/honzamach.monitored/system-status.j2"
+    - "inventory/group_files/servers/honzamach.monitored/system-status.{{ ansible_lsb['codename'] }}.j2"
+    - "inventory/group_files/servers/honzamach.monitored/system-status.j2"
     - "system-status.{{ ansible_lsb['codename'] }}.j2"
     - "system-status.j2"
 
@@ -82,11 +82,11 @@
     group: root
     mode: 0755
   with_first_found:
-    - "host_files/{{ inventory_hostname }}/system-status-local.j2"
-    - "group_files/servers-{{ msms_server_type }}/system-status-local.{{ ansible_lsb['codename'] }}.j2"
-    - "group_files/servers-{{ msms_server_type }}/system-status-local.j2"
-    - "group_files/servers/system-status-local.{{ ansible_lsb['codename'] }}.j2"
-    - "group_files/servers/system-status-local.j2"
+    - "inventory/host_files/{{ inventory_hostname }}/honzamach.monitored/system-status-local.j2"
+    - "inventory/group_files/servers_{{ msms_server_type }}/honzamach.monitored/system-status-local.{{ ansible_lsb['codename'] }}.j2"
+    - "inventory/group_files/servers_{{ msms_server_type }}/honzamach.monitored/system-status-local.j2"
+    - "inventory/group_files/servers/honzamach.monitored/system-status-local.{{ ansible_lsb['codename'] }}.j2"
+    - "inventory/group_files/servers/honzamach.monitored/system-status-local.j2"
     - "system-status-local.{{ ansible_lsb['codename'] }}.j2"
     - "system-status-local.j2"
   when: hm_monitored__local_commands|length
