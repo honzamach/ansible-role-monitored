@@ -67,7 +67,7 @@ Role variables
 There are following internal role variables defined in ``defaults/main.yml`` file,
 that can be overriden and adjusted as needed:
 
-.. envvar:: hm_monitored__package_list:
+.. envvar:: hm_monitored__package_list
 
     List of role-related packages, that will be installed on target system.
 
@@ -157,7 +157,7 @@ Additionally this role makes use of following built-in Ansible variables:
 
 .. envvar:: ansible_lsb['codename']
 
-    Debian distribution codename is used for :ref:`template customization <section-overview-customize-templates>`__
+    Debian distribution codename is used for :ref:`template customization <section-overview-customize-templates>`
     feature.
 
 
