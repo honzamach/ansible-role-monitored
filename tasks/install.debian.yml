@@ -1,11 +1,11 @@
 ---
 
-- name: Installing necessary packages
+- name: "Installing necessary packages"
   apt:
     name: "{{ hm_monitored__package_list }}"
     state: latest
 
-- name: Installing custom Nagios plugins
+- name: "Installing custom Nagios plugins"
   copy:
     src: "{{ item }}"
     dest: "{{ hm_monitored__plugins_dir }}/{{ item }}"
@@ -17,7 +17,7 @@
     - check_ro_mounts
     - check_ssl_cert
 
-- name: Installing system status utility directories
+- name: "Installing system status utility directories"
   file:
     path: "{{ item }}"
     state: directory

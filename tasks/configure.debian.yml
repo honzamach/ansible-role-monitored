@@ -1,6 +1,6 @@
 ---
 
-- name: Configuring NRPE daemon
+- name: "Configuring NRPE service"
   template:
     src: "{{ item }}"
     dest: /etc/nagios/nrpe.cfg
@@ -18,7 +18,7 @@
     - "nrpe.cfg.j2"
   notify: Restart NRPE service
 
-- name: Installing local NRPE daemon configurations
+- name: "Installing local NRPE service configurations"
   template:
     src: "{{ item }}"
     dest: /etc/nagios/nrpe.d/local.cfg
@@ -37,13 +37,13 @@
   notify: Restart NRPE service
   when: hm_monitored__local_commands|length
 
-- name: Ensuring NRPE daemon is running and enabled at system start
+- name: "Ensuring NRPE service is running and enabled at system start"
   service:
     name: "{{ hm_monitored__service_name }}"
     state: started
     enabled: yes
 
-- name: Managing system-status script
+- name: "Managing system-status script"
   template:
     src: "{{ item }}"
     dest: /opt/system-status/system-status
@@ -60,13 +60,13 @@
     - "system-status.{{ ansible_lsb['codename'] }}.j2"
     - "system-status.j2"
 
-- name: Managing system-status script installation
+- name: "Managing system-status script installation"
   file:
     src: /opt/system-status/system-status
     dest: /usr/local/bin/system-status
     state: link
 
-- name: Managing system status utility subdirectory
+- name: "Managing system status utility subdirectory"
   file:
     path: /opt/system-status/system-status.d
     state: directory
@@ -74,7 +74,7 @@
     owner: root
     group: root
 
-- name: Managing system-status-local script
+- name: "Managing system-status-local script"
   template:
     src: "{{ item }}"
     dest: /opt/system-status/system-status.d/10-local
@@ -91,7 +91,7 @@
     - "system-status-local.j2"
   when: hm_monitored__local_commands|length
 
-- name: Removing system-status-local script
+- name: "Removing system-status-local script"
   file:
     path: /opt/system-status/system-status.d/10-local
     state: absent
