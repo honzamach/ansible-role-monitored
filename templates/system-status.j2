@@ -1,3 +1,4 @@
+#!/bin/bash
 #----------------------- <+++ansible-managed-file+++> -------------------------+
 #
 #                             IMPORTANT WARNING
@@ -6,6 +7,15 @@
 #  changes will be overwritten without any notice !!! You have been warned !!!
 #
 #----------------------- <+++ansible-managed-file+++> -------------------------+
+
+BRIEF=no
+while true; do
+  case "$1" in
+    -b | --brief ) BRIEF=yes; shift ;;
+    -- ) shift; break ;;
+    * ) break ;;
+  esac
+done
 
 echo "#==============================================================================#"
 echo "| SYSTEM STATUS                                                                |"
@@ -24,9 +34,16 @@ echo "UPTIME - `/usr/bin/uptime | cut -d \, -f 1`";
 {{ hm_monitored__plugins_dir }}/check_procs -w {{ hm_monitored__settings_check_procs['w'] }} -c {{ hm_monitored__settings_check_procs['c'] }} | sed 's/:/ -/' | cut -f 1 -d \|;
 {{ hm_monitored__plugins_dir }}/check_ntp_time -H {{ hm_monitored__ntp_server }} -w {{ hm_monitored__settings_check_ntp['w'] }} -c {{ hm_monitored__settings_check_ntp['c'] }} | cut -f 1 -d \| | sed 's/:/ -/';
 {{ hm_monitored__plugins_dir }}/check_ro_mounts -x '/media/*' -x '/sys/*' -X 'autofs' -X 'cgroup' -X 'binfmt_misc' -X 'debugfs' -X 'devpts' -X 'devtmpfs' -X 'fuse.gvfsd-fuse' -X 'fusectl' -X 'mqueue' -X 'proc' -X 'selinuxfs' -X 'sysfs' -X 'tmpfs' | sed 's/:/ -/'
-for status_file in `find /opt/system-status/system-status.d -type f -executable | sort`
-do
-    $status_file
-done
+if [[ "$BRIEF" == 'no' ]]; then
+    for status_file in `find /opt/system-status/system-status.d -type f -executable | sort`
+    do
+        $status_file
+    done
+fi
 echo "+------------------------------------------------------------------------------+"
-echo "Current system time: `date`"
+echo "Current system time: `date --rfc-3339=second`"
+echo ""
+if [[ "$BRIEF" == 'yes' ]]; then
+	echo "For full system status please execute: 'system-status'"
+	echo ""
+fi
