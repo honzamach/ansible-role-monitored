@@ -8,42 +8,65 @@
 #
 #----------------------- <+++ansible-managed-file+++> -------------------------+
 
-BRIEF=no
+# Load shared library.
+. /opt/msms/lib/libmsms.sh
+
+function print_help() {
+    echo "$0"
+    echo ""
+    echo "Simple utility for displaying health of current system"
+    echo ""
+    echo "Usage:"
+    echo "    $0 [OPTION]..."
+    echo ""
+    echo "Available options:"
+    echo "    -b, --brief    show only general system status"
+    echo "    -c, --color    use colorized output for better readability"
+    echo "    -h, --help     print this message, then exit"
+    echo ""
+    exit 0
+}
+
+export MSMS_FLAG_BRIEF=no
+export MSMS_FLAG_COLOR=no
 while true; do
   case "$1" in
-    -b | --brief ) BRIEF=yes; shift ;;
+    -b | --brief ) export MSMS_FLAG_BRIEF=yes; shift ;;
+    -c | --color ) export MSMS_FLAG_COLOR=yes; shift ;;
+    -h | --help ) print_help; shift ;;
     -- ) shift; break ;;
     * ) break ;;
   esac
 done
 
-echo "#==============================================================================#"
-echo "| SYSTEM STATUS                                                                |"
-echo "#==============================================================================#"
+
+widget_header_box "SYSTEM STATUS" "${MSMS_FLAG_COLOR}" "${MSMS_WIDGET_WIDTH}"
 echo "RELEASE - `lsb_release -d | cut -f 2 -d : | sed 's/^\s//'`";
 echo "UPTIME - `/usr/bin/uptime | cut -d \, -f 1`";
-{{ hm_monitored__plugins_dir }}/check_apt | sed 's/:/ -/' | cut -f 1 -d \|;
-{{ hm_monitored__plugins_dir }}/check_users -w {{ hm_monitored__settings_check_users['w'] }} -c {{ hm_monitored__settings_check_users['c'] }} | cut -f 1 -d \|;
-{{ hm_monitored__plugins_dir }}/check_load -w {{ hm_monitored__settings_check_load['w'] }} -c {{ hm_monitored__settings_check_load['c'] }} | cut -f 1 -d \|;
+{{ hm_monitored__plugins_dir }}/check_apt | sed 's/:/ -/' | cut -f 1 -d \| | nrpe_status_colorize "${MSMS_FLAG_COLOR}"
+{{ hm_monitored__plugins_dir }}/check_users -w {{ hm_monitored__settings_check_users['w'] }} -c {{ hm_monitored__settings_check_users['c'] }} | cut -f 1 -d \| | nrpe_status_colorize "${MSMS_FLAG_COLOR}"
+echo -n "LOAD "
+{{ hm_monitored__plugins_dir }}/check_load -w {{ hm_monitored__settings_check_load['w'] }} -c {{ hm_monitored__settings_check_load['c'] }} | cut -f 1 -d \| | nrpe_status_colorize "${MSMS_FLAG_COLOR}"
 {% for mnt in ansible_mounts %}
 {% if mnt['mount'] in ['/','/var','/home'] %}
-{{ hm_monitored__plugins_dir }}/check_disk -w {{ hm_monitored__settings_check_disk['w'] }} -c {{ hm_monitored__settings_check_disk['c'] }} -p {{ mnt['mount'] }} / | cut -f 1 -d \;;
+{{ hm_monitored__plugins_dir }}/check_disk -w {{ hm_monitored__settings_check_disk['w'] }} -c {{ hm_monitored__settings_check_disk['c'] }} -p {{ mnt['mount'] }} / | cut -f 1 -d \; | nrpe_status_colorize "${MSMS_FLAG_COLOR}"
 {% endif %}
 {% endfor %}
-{{ hm_monitored__plugins_dir }}/check_procs -w {{ hm_monitored__settings_check_zombies['w'] }} -c {{ hm_monitored__settings_check_zombies['c'] }} -s Z | sed 's/:/ -/' | cut -f 1 -d \|;
-{{ hm_monitored__plugins_dir }}/check_procs -w {{ hm_monitored__settings_check_procs['w'] }} -c {{ hm_monitored__settings_check_procs['c'] }} | sed 's/:/ -/' | cut -f 1 -d \|;
-{{ hm_monitored__plugins_dir }}/check_ntp_time -H {{ hm_monitored__ntp_server }} -w {{ hm_monitored__settings_check_ntp['w'] }} -c {{ hm_monitored__settings_check_ntp['c'] }} | cut -f 1 -d \| | sed 's/:/ -/';
-{{ hm_monitored__plugins_dir }}/check_ro_mounts -x '/media/*' -x '/sys/*' -X 'autofs' -X 'cgroup' -X 'binfmt_misc' -X 'debugfs' -X 'devpts' -X 'devtmpfs' -X 'fuse.gvfsd-fuse' -X 'fusectl' -X 'mqueue' -X 'proc' -X 'selinuxfs' -X 'sysfs' -X 'tmpfs' | sed 's/:/ -/'
-if [[ "$BRIEF" == 'no' ]]; then
+{{ hm_monitored__plugins_dir }}/check_procs -w {{ hm_monitored__settings_check_zombies['w'] }} -c {{ hm_monitored__settings_check_zombies['c'] }} -s Z | sed 's/:/ -/' | cut -f 1 -d \| | nrpe_status_colorize "${MSMS_FLAG_COLOR}"
+{{ hm_monitored__plugins_dir }}/check_procs -w {{ hm_monitored__settings_check_procs['w'] }} -c {{ hm_monitored__settings_check_procs['c'] }} | sed 's/:/ -/' | cut -f 1 -d \| | nrpe_status_colorize "${MSMS_FLAG_COLOR}"
+{{ hm_monitored__plugins_dir }}/check_ntp_time -H {{ hm_monitored__ntp_server }} -w {{ hm_monitored__settings_check_ntp['w'] }} -c {{ hm_monitored__settings_check_ntp['c'] }} | cut -f 1 -d \| | sed 's/:/ -/' | nrpe_status_colorize "${MSMS_FLAG_COLOR}"
+{{ hm_monitored__plugins_dir }}/check_ro_mounts -x '/media/*' -x '/sys/*' -X 'autofs' -X 'cgroup' -X 'binfmt_misc' -X 'debugfs' -X 'devpts' -X 'devtmpfs' -X 'fuse.gvfsd-fuse' -X 'fusectl' -X 'mqueue' -X 'proc' -X 'selinuxfs' -X 'sysfs' -X 'tmpfs' | sed 's/:/ -/' | nrpe_status_colorize "${MSMS_FLAG_COLOR}"
+if [[ "$MSMS_FLAG_BRIEF" == 'no' ]]; then
     for status_file in `find /opt/system-status/system-status.d -type f -executable | sort`
     do
         $status_file
     done
 fi
-echo "+------------------------------------------------------------------------------+"
+
+widget_separator "${MSMS_SEPARATOR_GLYPH}" "${MSMS_FLAG_COLOR}" "${MSMS_WIDGET_WIDTH}"
 echo "Current system time: `date --rfc-3339=second`"
 echo ""
-if [[ "$BRIEF" == 'yes' ]]; then
-	echo "For full system status please execute: 'system-status'"
-	echo ""
+if [[ "$MSMS_FLAG_BRIEF" == 'yes' ]]; then
+    echo "For full system status please execute: 'system-status'"
+    echo "For full system with highlighting please execute: 'system-status --color'"
 fi
