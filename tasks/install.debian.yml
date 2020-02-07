@@ -1,8 +1,8 @@
 ---
 
-- name: "Installing necessary packages"
+- name: "Installing necessary system packages"
   apt:
-    name: "{{ hm_monitored__package_list }}"
+    name: "{{ hm_monitored__install_packages[ansible_os_family|lower]['apt'] }}"
     state: latest
 
 - name: "Installing custom Nagios plugins"

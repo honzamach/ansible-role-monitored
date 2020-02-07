@@ -1,77 +1,45 @@
 ---
 
-#
-# List of role-related packages, that will be installed on target system.
-#
-hm_monitored__package_list:
-  - nagios-nrpe-server
-  - nagios-plugins-basic
-  - expect
+hm_monitored__install_packages:
+  debian:
+    apt:
+      - nagios-nrpe-server
+      - nagios-plugins-basic
+      - expect
 
-#
-# Location of Nagios plugin directory.
-#
 hm_monitored__plugins_dir: /usr/lib/nagios/plugins
 
-#
-# Port number for NRPE server listener.
-#
 hm_monitored__service_port: 5666
 
-#
-# List of allowed hosts for Nagios monitoring connections.
-#
 hm_monitored__allowed_hosts: []
 
-#
-# List of local Nagios commands.
-#
 hm_monitored__local_commands: []
 
-#
-# Monitoring configuration setting for **check_users** command.
-#
+hm_monitored__ntp_server:  195.113.144.201
+
 hm_monitored__settings_check_users:
   w: 10
   c: 15
 
-#
-# Monitoring configuration setting for **check_load** command.
-#
 hm_monitored__settings_check_load:
   w: 45,40,20
   c: 50,50,40
 
-#
-# Monitoring configuration setting for **check_disk** command.
-#
 hm_monitored__settings_check_disk:
   w: 20%
   c: 10%
 
-#
-# Monitoring configuration setting for **check_zombies** command.
-#
 hm_monitored__settings_check_zombies:
   w: 5
   c: 10
 
-#
-# Monitoring configuration setting for **check_procs** command.
-#
 hm_monitored__settings_check_procs:
   w: 500
   c: 1000
 
-#
-# Monitoring configuration setting for **check_ntp** command.
-#
 hm_monitored__settings_check_ntp:
   w: 0.5
   c: 1
 
-#
-# Monitoring configuration setting for **check_ssh** command.
-#
 hm_monitored__settings_check_ssh:
   p: 22
