@@ -62,7 +62,6 @@ Following roles have dependency on this role:
 * :ref:`firewalled <section-role-firewalled>` *[SOFT]*
 * :ref:`logserver <section-role-logserver>`
 * :ref:`mentat <section-role-mentat>` *[SOFT]*
-* :ref:`mentat_cesnet <section-role-mentat-cesnet>`
 * :ref:`mentat_dev <section-role-mentat-dev>` *[SOFT]*
 * :ref:`postgresql <section-role-postgresql>` *[SOFT]*
 * :ref:`util_inspector <section-role-util-inspector>` *[SOFT]*
