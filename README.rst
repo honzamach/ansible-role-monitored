@@ -16,6 +16,12 @@ This role installs following additional Nagios plugins:
 * `check_ro_mounts <https://exchange.nagios.org/directory/Plugins/Operating-Systems/Linux/check_ro_mounts/details>`__
 * `check_ssl_cert <https://exchange.nagios.org/directory/Plugins/Network-Protocols/HTTP/check_ssl_cert/details>`__
 
+It also provides handy ``system-status`` utility, which will run locally all
+configured Nagios monitoring plugins and display the results to the user. It
+can be particularly usefull to get quick and current overview of the system
+status without the need to interact with Nagios web interface of your monitoring
+server.
+
 **Table of Contents:**
 
 * :ref:`section-role-monitored-installation`
@@ -75,6 +81,9 @@ Usage
 
 Example content of inventory file ``inventory``::
 
+    [servers]
+    your-server
+
     [servers_monitored]
     your-server
 
@@ -114,6 +123,15 @@ It is recommended to follow these configuration principles:
 * Use files ``inventory/host_vars/[your-server]/vars.yml`` to customize settings
   for particular servers. Please see section :ref:`section-role-monitored-variables`
   for all available options.
+
+This role provides some preconfigured monitoring tasks that should be usefull for
+all servers. You can customize these to your needs by just adjusting the warning
+and critical thresholds in variables ``hm_monitored__settings_check_*`` (see below).
+You may also add any custom monitoring tasks with :envvar:`hm_monitored__local_commands`.
+
+But mostly the power of this role will be leveraged by other roles by placing
+their own monitoring configuration files into ``/etc/nagios/nrpe.d/`` and
+``/opt/system-status/system-status.d/`` directories.
 
 
 .. _section-role-monitored-variables:
@@ -264,9 +282,44 @@ Managed files
 This role manages content of following files on target system:
 
 * ``/etc/nagios/nrpe.cfg`` *[TEMPLATE]*
+
+  Customizable with following templates::
+
+    ``inventory/host_files/{{ inventory_hostname }}/honzamach.monitored/nrpe.cfg.j2``
+    ``inventory/group_files/servers_{{ msms_server_type }}/honzamach.monitored/nrpe.cfg.{{ ansible_lsb['codename'] }}.j2``
+    ``inventory/group_files/servers_{{ msms_server_type }}/honzamach.monitored/nrpe.cfg.j2``
+    ``inventory/group_files/servers/honzamach.monitored/nrpe.cfg.{{ ansible_lsb['codename'] }}.j2``
+    ``inventory/group_files/servers/honzamach.monitored/nrpe.cfg.j2``
+
 * ``/etc/nagios/nrpe.d/local.cfg`` *[TEMPLATE]*
+
+  Customizable with following templates::
+
+    ``inventory/host_files/{{ inventory_hostname }}/honzamach.monitored/nrpe_local.cfg.j2``
+    ``inventory/group_files/servers_{{ msms_server_type }}/honzamach.monitored/nrpe_local.cfg.{{ ansible_lsb['codename'] }}.j2``
+    ``inventory/group_files/servers_{{ msms_server_type }}/honzamach.monitored/nrpe_local.cfg.j2``
+    ``inventory/group_files/servers/honzamach.monitored/nrpe_local.cfg.{{ ansible_lsb['codename'] }}.j2``
+    ``inventory/group_files/servers/honzamach.monitored/nrpe_local.cfg.j2``
+
 * ``/opt/system-status/system-status`` *[TEMPLATE]*
+
+  Customizable with following templates::
+
+    ``inventory/host_files/{{ inventory_hostname }}/honzamach.monitored/system-status.j2``
+    ``inventory/group_files/servers_{{ msms_server_type }}/honzamach.monitored/system-status.{{ ansible_lsb['codename'] }}.j2``
+    ``inventory/group_files/servers_{{ msms_server_type }}/honzamach.monitored/system-status.j2``
+    ``inventory/group_files/servers/honzamach.monitored/system-status.{{ ansible_lsb['codename'] }}.j2``
+    ``inventory/group_files/servers/honzamach.monitored/system-status.j2``
+
 * ``/opt/system-status/system-status.d/10-local`` *[TEMPLATE]*
+
+  Customizable with following templates::
+
+    ``inventory/host_files/{{ inventory_hostname }}/honzamach.monitored/system-status-local.j2``
+    ``inventory/group_files/servers_{{ msms_server_type }}/honzamach.monitored/system-status-local.{{ ansible_lsb['codename'] }}.j2``
+    ``inventory/group_files/servers_{{ msms_server_type }}/honzamach.monitored/system-status-local.j2``
+    ``inventory/group_files/servers/honzamach.monitored/system-status-local.{{ ansible_lsb['codename'] }}.j2``
+    ``inventory/group_files/servers/honzamach.monitored/system-status-local.j2``
 
 
 .. _section-role-monitored-author:
